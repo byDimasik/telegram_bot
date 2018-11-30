@@ -10,4 +10,6 @@ import org.springframework.context.annotation.Configuration;
 public class TelegramBotConfig {
 
     private String token;
+
+    private String name;
 }
