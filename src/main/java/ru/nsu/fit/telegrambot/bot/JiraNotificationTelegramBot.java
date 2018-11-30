@@ -13,6 +13,7 @@ import java.util.List;
 @Component
 public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
+    private static final String TG_PREFIX = "@";
     private final TelegramBotConfig telegramBotConfig;
 
     @Autowired
@@ -24,7 +25,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(update.getMessage().getChatId())
-                .setText("Jira");
+                .setText(update.getMessage().getText());
 
         try {
             execute(sendMessage);
@@ -36,12 +37,14 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdatesReceived(List<Update> updates) {
-
+        for (Update update: updates) {
+            onUpdateReceived(update);
+        }
     }
 
     @Override
     public String getBotUsername() {
-        return telegramBotConfig.getName();
+        return TG_PREFIX + telegramBotConfig.getName();
     }
 
     @Override
