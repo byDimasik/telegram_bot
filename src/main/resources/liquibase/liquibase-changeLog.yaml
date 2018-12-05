@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/change-set-001.yaml

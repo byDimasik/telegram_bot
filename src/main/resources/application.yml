@@ -20,4 +20,4 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   liquibase:
-    change-log: classpath:liquibase/liquibase-changeLog.xml
+    change-log: classpath:liquibase/liquibase-changeLog.yaml
