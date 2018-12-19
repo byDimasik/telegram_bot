@@ -7,8 +7,4 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JiraEventDto {
     private String webhookEvent;
-
-    public String eventDesctiption() {
-        return webhookEvent;
-    }
 }
