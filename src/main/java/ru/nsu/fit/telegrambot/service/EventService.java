@@ -6,8 +6,12 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.bot.JiraNotificationTelegramBot;
+import ru.nsu.fit.telegrambot.dto.JiraEventDto;
 import ru.nsu.fit.telegrambot.repository.EventRepository;
 
+/**
+ * Event service
+ */
 @Slf4j
 @Service
 public class EventService {
@@ -15,6 +19,12 @@ public class EventService {
     private final JiraNotificationTelegramBot bot;
     private final EventRepository eventRepository;
 
+    /**
+     * Constructor with spring dependency injection
+     *
+     * @param bot             {@link JiraNotificationTelegramBot} bean
+     * @param eventRepository {@link EventRepository} bean
+     */
     @Autowired
     public EventService(JiraNotificationTelegramBot bot,
                         EventRepository eventRepository) {
@@ -22,11 +32,16 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public void handleEvent() {
+    /**
+     * Handle common event
+     *
+     * @param jiraEventDto common jira event
+     */
+    public void handleEvent(JiraEventDto jiraEventDto) {
         eventRepository.findAll().forEach(event -> {
             SendMessage sendMessage = new SendMessage()
                     .setChatId(event.getChatId())
-                    .setText("Smth happened");
+                    .setText(jiraEventDto.getWebhookEvent());
 
             try {
                 bot.execute(sendMessage);
