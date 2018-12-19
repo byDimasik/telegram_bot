@@ -5,5 +5,10 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JiraCommnetEventDto extends JiraEventDto {
+public class JiraEventDto {
+    private String webhookEvent;
+
+    public String eventDesctiption() {
+        return webhookEvent;
+    }
 }
