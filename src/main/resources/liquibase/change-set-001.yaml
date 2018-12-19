@@ -1,0 +1,161 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: d.shishliannikov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: user
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: nickname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: d.shishliannikov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: issue
+        - tableExists:
+            tableName: user
+      changes:
+        - createTable:
+            tableName: issue
+            columns:
+              - column:
+                  name: userId
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: fk_user_id
+                    references: user(id)
+              - column:
+                  name: create
+                  type: boolean
+              - column:
+                  name: update
+                  type: boolean
+              - column:
+                  name: delete
+                  type: boolean
+              - column:
+                  name: worklog
+                  type: boolean
+  - changeSet:
+      id: 3
+      author: d.shishliannikov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comment
+        - tableExists:
+            tableName: user
+      changes:
+        - createTable:
+            tableName: comment
+            columns:
+              - column:
+                  name: userId
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: fk_user_id
+                    references: user(id)
+              - column:
+                  name: create
+                  type: boolean
+              - column:
+                  name: update
+                  type: boolean
+              - column:
+                  name: delete
+                  type: boolean
+  - changeSet:
+      id: 4
+      author: d.shishliannikov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: feature
+        - tableExists:
+            tableName: user
+      changes:
+        - createTable:
+            tableName: feature
+            columns:
+              - column:
+                  name: userId
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: fk_user_id
+                    references: user(id)
+              - column:
+                  name: watch
+                  type: boolean
+              - column:
+                  name: issue
+                  type: boolean
+              - column:
+                  name: subtask
+                  type: boolean
+              - column:
+                  name: attachment
+                  type: boolean
+  - changeSet:
+      id: 5
+      author: d.shishliannikov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: sprint
+        - tableExists:
+            tableName: user
+      changes:
+        - createTable:
+            tableName: sprint
+            columns:
+              - column:
+                  name: userId
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: fk_user_id
+                    references: user(id)
+              - column:
+                  name: create
+                  type: boolean
+              - column:
+                  name: update
+                  type: boolean
+              - column:
+                  name: delete
+                  type: boolean
+              - column:
+                  name: start
+                  type: boolean
+              - column:
+                  name: close
+                  type: boolean
+
