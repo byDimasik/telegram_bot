@@ -5,5 +5,5 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JiraFeatureEventDto {
+public class JiraFeatureEventDto extends JiraEventDto {
 }
