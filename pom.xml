@@ -77,6 +77,19 @@
 
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>sonar</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<sonar.host.url>http://84.237.50.237:9000</sonar.host.url>
+				<sonar.login>09405c7686608cf67f7259aa2844979f8cf5b1c6</sonar.login>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
