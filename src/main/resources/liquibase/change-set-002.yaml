@@ -1,0 +1,74 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: d.lavrinenko
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: user
+        - tableExists:
+            tableName: issue
+        - tableExists:
+            tableName: sprint
+        - tableExists:
+            tableName: feature
+        - tableExists:
+            tableName: comment
+      changes:
+        - dropTable:
+            tableName: feature
+        - dropTable:
+            tableName: issue
+        - dropTable:
+            tableName: sprint
+        - dropTable:
+            tableName: comment
+  - changeSet:
+      id: 2
+      author: d.lavrinenko
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: user
+        - not:
+          - tableExists:
+              tableName: issue
+          - tableExists:
+              tableName: sprint
+          - tableExists:
+              tableName: feature
+          - tableExists:
+              tableName: comment
+      changes:
+        - dropTable:
+            tableName: user
+  - changeSet:
+      id: 3
+      author: d.lavrinenko
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: event
+      changes:
+        - createTable:
+            tableName: event
+            columns:
+              - column:
+                  name: chat_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: issue_create
+                  type: boolean
+              - column:
+                  name: issue_update
+                  type: boolean
+              - column:
+                  name: issue_delete
+                  type: boolean
+              - column:
+                  name: issue_worklog
+                  type: boolean
