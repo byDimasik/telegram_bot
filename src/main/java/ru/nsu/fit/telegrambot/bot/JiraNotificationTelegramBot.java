@@ -7,37 +7,50 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.config.TelegramBotConfig;
+import ru.nsu.fit.telegrambot.service.UserRegistrationService;
 
 import java.util.List;
 
+/**
+ * Jira Notification Telegram Bot
+ */
 @Component
 public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
     private static final String TG_PREFIX = "@";
     private final TelegramBotConfig telegramBotConfig;
+    private final UserRegistrationService userRegistrationService;
 
+    /**
+     * Constructor with spring dependency injection
+     *
+     * @param telegramBotConfig       {@link TelegramBotConfig} bean
+     * @param userRegistrationService {@link UserRegistrationService} bean
+     */
     @Autowired
-    public JiraNotificationTelegramBot(TelegramBotConfig telegramBotConfig) {
+    public JiraNotificationTelegramBot(TelegramBotConfig telegramBotConfig,
+                                       UserRegistrationService userRegistrationService) {
         this.telegramBotConfig = telegramBotConfig;
+        this.userRegistrationService = userRegistrationService;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
+        userRegistrationService.register(update);
+
         SendMessage sendMessage = new SendMessage()
                 .setChatId(update.getMessage().getChatId())
                 .setText(update.getMessage().getText());
-
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void onUpdatesReceived(List<Update> updates) {
-        for (Update update: updates) {
+        for (Update update : updates) {
             onUpdateReceived(update);
         }
     }
