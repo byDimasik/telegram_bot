@@ -3,9 +3,7 @@ package ru.nsu.fit.telegrambot.bot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.config.TelegramBotConfig;
 import ru.nsu.fit.telegrambot.service.UserRegistrationService;
 
@@ -37,15 +35,6 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         userRegistrationService.register(update);
-
-        SendMessage sendMessage = new SendMessage()
-                .setChatId(update.getMessage().getChatId())
-                .setText(update.getMessage().getText());
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
