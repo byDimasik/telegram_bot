@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: 1
       author: d.shishliannikov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: user
       changes:
         - createTable:
             tableName: user
@@ -22,6 +27,9 @@ databaseChangeLog:
       author: d.shishliannikov
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: issue
         - tableExists:
             tableName: user
       changes:
@@ -53,6 +61,9 @@ databaseChangeLog:
       author: d.shishliannikov
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comment
         - tableExists:
             tableName: user
       changes:
@@ -81,6 +92,9 @@ databaseChangeLog:
       author: d.shishliannikov
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: feature
         - tableExists:
             tableName: user
       changes:
@@ -112,6 +126,9 @@ databaseChangeLog:
       author: d.shishliannikov
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: sprint
         - tableExists:
             tableName: user
       changes:
