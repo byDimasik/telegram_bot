@@ -12,8 +12,8 @@ import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
 import ru.nsu.fit.telegrambot.model.EventModel;
 import ru.nsu.fit.telegrambot.repository.EventRepository;
-import ru.nsu.fit.telegrambot.viewModel.JiraEventFormatter;
-import ru.nsu.fit.telegrambot.viewModel.JiraEventTypeWithMessage;
+import ru.nsu.fit.telegrambot.utill.JiraEventFormatter;
+import ru.nsu.fit.telegrambot.utill.JiraEventTypeWithMessage;
 
 import java.util.ArrayList;
 import java.util.List;

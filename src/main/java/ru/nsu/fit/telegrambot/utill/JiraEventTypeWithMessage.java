@@ -1,4 +1,4 @@
-package ru.nsu.fit.telegrambot.viewModel;
+package ru.nsu.fit.telegrambot.utill;
 
 import lombok.Data;
 import ru.nsu.fit.telegrambot.model.enums.CallBackEventType;
