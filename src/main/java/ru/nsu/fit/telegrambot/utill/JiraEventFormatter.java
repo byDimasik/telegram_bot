@@ -2,35 +2,91 @@ package ru.nsu.fit.telegrambot.utill;
 
 import ru.nsu.fit.telegrambot.dto.*;
 import ru.nsu.fit.telegrambot.dto.addition.issueInformation.JiraIssueDto;
+import ru.nsu.fit.telegrambot.model.enums.CallBackEventType;
 
 public class JiraEventFormatter {
-    public String parseIssueEvent(JiraIssueEventDto event) {
+    public JiraEventTypeWithMessage parseIssueEvent(JiraIssueEventDto event) {
+        JiraEventTypeWithMessage result = new JiraEventTypeWithMessage();
+        String messageType = parseEventType(event);
         String message = event.getIssue().getFields().getCreator().getDisplayName();
-        message += " " + parseEventType(event);
+        message += " " + messageType;
         message += " " + partIssueMessage(event.getIssue()) + ".";
-        return message;
+        switch (messageType) {
+            case "create":
+                result.setType(CallBackEventType.ISSUE_CREATE);
+                break;
+            case "update":
+                result.setType(CallBackEventType.ISSUE_UPDATE);
+                break;
+            case "delete":
+                result.setType(CallBackEventType.ISSUE_DELETE);
+                break;
+            default:
+                break;
+        }
+        result.setMessage(message);
+        return result;
     }
 
-    public String parseFeatureEvent(JiraFeatureEventDto event) {
-        return partIssueMessage(event.getIssue());
+    public JiraEventTypeWithMessage parseFeatureEvent(JiraFeatureEventDto event) {
+        JiraIssueEventDto tempDto = new JiraIssueEventDto();
+        tempDto.setIssue(event.getIssue());
+        return parseIssueEvent(tempDto);
     }
 
-    public String parseSprintEvent(JiraSprintEventDto event) {
+    public JiraEventTypeWithMessage parseSprintEvent(JiraSprintEventDto event) {
+        JiraEventTypeWithMessage result = new JiraEventTypeWithMessage();
+        String messageType = parseEventType(event);
         String message = "Sprint";
         message += " \"" + event.getSprint().getName() + "\"";
-        message += " " + parseEventType(event);
+        message += " " + messageType;
         message += ". State - \"" + event.getSprint().getState() + "\"";
         if(event.getSprint().getGoal() != null) {
             message += ". Goal - \"" + event.getSprint().getGoal() +"\".";
         }
-        return message;
+        switch (messageType) {
+            case "create":
+                result.setType(CallBackEventType.SPRINT_CREATE);
+                break;
+            case "update":
+                result.setType(CallBackEventType.SPRINT_UPDATE);
+                break;
+            case "delete":
+                result.setType(CallBackEventType.SPRINT_DELETE);
+                break;
+            case "start":
+                result.setType(CallBackEventType.SPRINT_START);
+            case "close":
+                result.setType(CallBackEventType.SPRINT_CLOSE);
+            default:
+                break;
+        }
+        result.setMessage(message);
+        return result;
     }
 
-    public String parseCommentaryEvent(JiraCommentEventDto event) {
+    public JiraEventTypeWithMessage parseCommentaryEvent(JiraCommentEventDto event) {
+        JiraEventTypeWithMessage result = new JiraEventTypeWithMessage();
+        String messageType = parseEventType(event);
         String message = event.getComment().getAuthor().getDisplayName();
-        message += " commented on " + partIssueMessage(event.getIssue());
+        message += " " + messageType;
+        message += " " + partIssueMessage(event.getIssue());
         message += ". Commentary text \"" + event.getComment().getBody() + "\".";
-        return message;
+        switch (messageType) {
+            case "create":
+                result.setType(CallBackEventType.COMMENT_CREATE);
+                break;
+            case "update":
+                result.setType(CallBackEventType.COMMENT_UPDATE);
+                break;
+            case "delete":
+                result.setType(CallBackEventType.COMMENT_DELETE);
+                break;
+            default:
+                break;
+        }
+        result.setMessage(message);
+        return result;
     }
 
     private String partIssueMessage(JiraIssueDto issue) {
@@ -50,9 +106,9 @@ public class JiraEventFormatter {
         } else if (eventType.contains("deleted")){
             resultMessage = "delete";
         } else if (eventType.contains("started")) {
-            resultMessage = "started";
+            resultMessage = "start";
         } else if (eventType.contains("closed")) {
-            resultMessage = "closed";
+            resultMessage = "close";
         }
         return resultMessage;
     }

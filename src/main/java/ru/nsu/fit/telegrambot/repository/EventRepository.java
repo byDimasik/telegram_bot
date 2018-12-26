@@ -26,7 +26,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param issueCreate issue create flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdByIssueCreateIs(Boolean issueCreate);
+    List<EventModel> findAllChatIdByIssueCreateIs(Boolean issueCreate);
 
     /**
      * Find all chat ids to send issue update event
@@ -34,7 +34,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param issueUpdate issue update flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdByIssueUpdateIs(Boolean issueUpdate);
+    List<EventModel> findAllChatIdByIssueUpdateIs(Boolean issueUpdate);
 
     /**
      * Find all chat ids to send issue delete event
@@ -42,7 +42,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param issueDelete issue delete flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdByIssueDeleteIs(Boolean issueDelete);
+    List<EventModel> findAllChatIdByIssueDeleteIs(Boolean issueDelete);
 
     /**
      * Find all chat ids to send issue work log event
@@ -50,7 +50,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param issueWorkLog issue work log flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdByIssueWorkLogIs(Boolean issueWorkLog);
+    List<EventModel> findAllChatIdByIssueWorkLogIs(Boolean issueWorkLog);
 
     /**
      * Find all chat ids to send comment create event
@@ -58,7 +58,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param commentCreate comment create flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdByCommentCreateIs(Boolean commentCreate);
+    List<EventModel> findAllChatIdByCommentCreateIs(Boolean commentCreate);
 
     /**
      * Find all chat ids to send comment update event
@@ -66,7 +66,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param commentUpdate comment update flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdByCommentUpdateIs(Boolean commentUpdate);
+    List<EventModel> findAllChatIdByCommentUpdateIs(Boolean commentUpdate);
 
     /**
      * Find all chat ids to send comment delete event
@@ -74,7 +74,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param commentDelete comment delete flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdByCommentDeleteIs(Boolean commentDelete);
+    List<EventModel> findAllChatIdByCommentDeleteIs(Boolean commentDelete);
 
     /**
      * Find all chat ids to send sprint create event
@@ -82,7 +82,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param sprintCreate sprint create flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdBySprintCreateIs(Boolean sprintCreate);
+    List<EventModel> findAllChatIdBySprintCreateIs(Boolean sprintCreate);
 
     /**
      * Find all chat ids to send sprint update event
@@ -90,7 +90,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param sprintUpdate sprint update flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdBySprintUpdateIs(Boolean sprintUpdate);
+    List<EventModel> findAllChatIdBySprintUpdateIs(Boolean sprintUpdate);
 
     /**
      * Find all chat ids to send sprint delete event
@@ -98,7 +98,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param sprintDelete sprint delete flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdBySprintDeleteIs(Boolean sprintDelete);
+    List<EventModel> findAllChatIdBySprintDeleteIs(Boolean sprintDelete);
 
     /**
      * Find all chat ids to send sprint start event
@@ -106,7 +106,7 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param sprintStart sprint start flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdBySprintStartIs(Boolean sprintStart);
+    List<EventModel> findAllChatIdBySprintStartIs(Boolean sprintStart);
 
     /**
      * Find all chat ids to send sprint close event
@@ -114,5 +114,5 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @param sprintClose sprint close flag
      * @return list of chat ids
      */
-    List<Long> findAllChatIdBySprintCloseIs(Boolean sprintClose);
+    List<EventModel> findAllChatIdBySprintCloseIs(Boolean sprintClose);
 }
