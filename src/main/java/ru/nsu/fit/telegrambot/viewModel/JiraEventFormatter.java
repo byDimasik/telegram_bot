@@ -10,7 +10,7 @@ public class JiraEventFormatter {
     public String parseIssueEvent(JiraIssueEventDto event) {
         String message = event.getIssue().getFields().getCreator().getDisplayName();
         message += " " + parseEventType(event);
-        message += " " + partIssueMessage(event.getIssue());
+        message += " " + partIssueMessage(event.getIssue()) + ".";
         return message;
     }
 
@@ -20,7 +20,7 @@ public class JiraEventFormatter {
         message += " " + parseEventType(event);
         message += ". State - \"" + event.getSprint().getState() + "\"";
         if(event.getSprint().getGoal() != null) {
-            message += ". Goal - \"" + event.getSprint().getGoal() +"\"";
+            message += ". Goal - \"" + event.getSprint().getGoal() +"\".";
         }
         return message;
     }
@@ -28,7 +28,7 @@ public class JiraEventFormatter {
     public String parseCommentaryEvent(JiraCommentEventDto event) {
         String message = event.getComment().getAuthor().getDisplayName();
         message += " commented on " + partIssueMessage(event.getIssue());
-        message += ". Commentary text \"" + event.getComment().getBody() + "\"";
+        message += ". Commentary text \"" + event.getComment().getBody() + "\".";
         return message;
     }
 
