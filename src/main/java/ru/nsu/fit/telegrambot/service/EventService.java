@@ -11,7 +11,7 @@ import ru.nsu.fit.telegrambot.dto.JiraFeatureEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
 import ru.nsu.fit.telegrambot.repository.EventRepository;
-import ru.nsu.fit.telegrambot.viewModel.JiraEventFormatter;
+import ru.nsu.fit.telegrambot.utill.JiraEventFormatter;
 
 /**
  * Event service

@@ -3,6 +3,7 @@ package ru.nsu.fit.telegrambot.model.enums;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.nsu.fit.telegrambot.bot.view.InlineKeyboardBuilder;
 import ru.nsu.fit.telegrambot.bot.view.TelegramBotView;
+import ru.nsu.fit.telegrambot.model.EventModel;
 
 import static ru.nsu.fit.telegrambot.model.enums.CallBackEventType.*;
 
@@ -10,7 +11,7 @@ public enum MenuType {
 
     BACK("Which type of notification you want to configure:") {
         @Override
-        public SendMessage renderMenu(TelegramBotView manager, Long chatId) {
+        public SendMessage renderMenu(TelegramBotView manager, EventModel eventModel) {
             manager.setColumnsCount(2);
 
             manager.addMenuItem("Issue", "issue");
@@ -21,12 +22,12 @@ public enum MenuType {
 
             manager.init();
 
-            return buildMessage(manager, chatId);
+            return buildMessage(manager, eventModel.getChatId());
         }
     },
     ISSUE("Issue notifications configurations:") {
         @Override
-        public SendMessage renderMenu(TelegramBotView manager, Long chatId) {
+        public SendMessage renderMenu(TelegramBotView manager, EventModel eventModel) {
             manager.setColumnsCount(2);
 
             manager.addMenuItem(ISSUE_CREATE.getButtonText(), ISSUE_CREATE.name());
@@ -37,12 +38,12 @@ public enum MenuType {
 
             manager.init();
 
-            return buildMessage(manager, chatId);
+            return buildMessage(manager, eventModel.getChatId());
         }
     },
     SPRINT("Sprint notifications configurations:") {
         @Override
-        public SendMessage renderMenu(TelegramBotView manager, Long chatId) {
+        public SendMessage renderMenu(TelegramBotView manager, EventModel eventModel) {
             manager.setColumnsCount(2);
 
             manager.addMenuItem(SPRINT_CREATE.getButtonText(), SPRINT_CREATE.name());
@@ -53,12 +54,12 @@ public enum MenuType {
 
             manager.init();
 
-            return buildMessage(manager, chatId);
+            return buildMessage(manager, eventModel.getChatId());
         }
     },
     FEATURE("Feature notifications configurations:") {
         @Override
-        public SendMessage renderMenu(TelegramBotView manager, Long chatId) {
+        public SendMessage renderMenu(TelegramBotView manager, EventModel eventModel) {
             manager.setColumnsCount(2);
 
             manager.addMenuItem("Watch", "featurewatch");
@@ -69,12 +70,12 @@ public enum MenuType {
 
             manager.init();
 
-            return buildMessage(manager, chatId);
+            return buildMessage(manager, eventModel.getChatId());
         }
     },
     COMMENT("Comment notifications configurations:") {
         @Override
-        public SendMessage renderMenu(TelegramBotView manager, Long chatId) {
+        public SendMessage renderMenu(TelegramBotView manager, EventModel eventModel) {
             manager.setColumnsCount(2);
 
             manager.addMenuItem(COMMENT_CREATE.getButtonText(), COMMENT_CREATE.name());
@@ -84,7 +85,7 @@ public enum MenuType {
 
             manager.init();
 
-            return buildMessage(manager, chatId);
+            return buildMessage(manager, eventModel.getChatId());
         }
     };
 
@@ -94,7 +95,7 @@ public enum MenuType {
         this.messageText = messageText;
     }
 
-    public abstract SendMessage renderMenu(TelegramBotView manager, Long chatId);
+    public abstract SendMessage renderMenu(TelegramBotView manager, EventModel eventModel);
 
     SendMessage buildMessage(TelegramBotView manager, Long chatId) {
         InlineKeyboardBuilder builder;
