@@ -17,6 +17,8 @@ import java.util.Optional;
 @Service
 public class UserRegistrationService {
 
+    private static final boolean DEFAULT_VALUE = false;
+
     private final EventRepository eventRepository;
 
     /**
@@ -40,7 +42,21 @@ public class UserRegistrationService {
 
             if (!eventRepository.findById(chatId).isPresent()) {
                 log.debug("Received update from unregister user with chat id: [{}]", chatId);
-                EventModel eventModel = EventModel.builder().chatId(chatId).build();
+                EventModel eventModel = EventModel.builder()
+                        .chatId(chatId)
+                        .issueCreate(DEFAULT_VALUE)
+                        .issueDelete(DEFAULT_VALUE)
+                        .issueUpdate(DEFAULT_VALUE)
+                        .issueWorkLog(DEFAULT_VALUE)
+                        .commentCreate(DEFAULT_VALUE)
+                        .commentUpdate(DEFAULT_VALUE)
+                        .commentDelete(DEFAULT_VALUE)
+                        .sprintClose(DEFAULT_VALUE)
+                        .sprintCreate(DEFAULT_VALUE)
+                        .sprintDelete(DEFAULT_VALUE)
+                        .sprintStart(DEFAULT_VALUE)
+                        .sprintUpdate(DEFAULT_VALUE)
+                        .build();
                 eventRepository.save(eventModel);
                 log.debug("User has been successfully registered with chat id: [{}]", chatId);
             }

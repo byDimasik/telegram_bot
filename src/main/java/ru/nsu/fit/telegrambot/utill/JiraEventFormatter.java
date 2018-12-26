@@ -90,7 +90,6 @@ public class JiraEventFormatter {
     }
 
     private String partIssueMessage(JiraIssueDto issue) {
-        JiraEventTypeWithMessage result;
         String message = issue.getFields().getIssuetype().getName().toLowerCase();
         message += " " + issue.getKey();
         message += " \"" + issue.getFields().getSummary() + "\"";
