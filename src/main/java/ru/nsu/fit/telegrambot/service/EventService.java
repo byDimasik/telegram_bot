@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.bot.JiraNotificationTelegramBot;
+import ru.nsu.fit.telegrambot.dto.JiraCommentEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
@@ -77,5 +78,9 @@ public class EventService {
     public void handleSprintEvent(JiraSprintEventDto event) {
 //        handleMessage(eventFormatter.parseIssueEvent(event));
         System.out.println(eventFormatter.parseSprintEvent(event));
+    }
+
+    public void handleCommentaryEvent(JiraCommentEventDto event) {
+        System.out.println(eventFormatter.parseCommentaryEvent(event));
     }
 }

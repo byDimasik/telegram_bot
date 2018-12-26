@@ -1,16 +1,16 @@
 package ru.nsu.fit.telegrambot.viewModel;
 
+import ru.nsu.fit.telegrambot.dto.JiraCommentEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
+import ru.nsu.fit.telegrambot.dto.addition.issueInformation.JiraIssueDto;
 
 public class JiraEventFormatter {
     public String parseIssueEvent(JiraIssueEventDto event) {
         String message = event.getIssue().getFields().getCreator().getDisplayName();
         message += " " + parseEventType(event);
-        message += " " + event.getIssue().getFields().getIssuetype().getName().toLowerCase();
-        message += " " + event.getIssue().getKey();
-        message += " \"" + event.getIssue().getFields().getSummary() + "\"";
+        message += " " + partIssueMessage(event.getIssue());
         return message;
     }
 
@@ -22,6 +22,20 @@ public class JiraEventFormatter {
         if(event.getSprint().getGoal() != null) {
             message += ". Goal - \"" + event.getSprint().getGoal() +"\"";
         }
+        return message;
+    }
+
+    public String parseCommentaryEvent(JiraCommentEventDto event) {
+        String message = event.getComment().getAuthor().getDisplayName();
+        message += " commented on " + partIssueMessage(event.getIssue());
+        message += ". Commentary text \"" + event.getComment() + "\"";
+        return message;
+    }
+
+    private String partIssueMessage(JiraIssueDto issue) {
+        String message = issue.getFields().getIssuetype().getName().toLowerCase();
+        message += " " + issue.getKey();
+        message += " \"" + issue.getFields().getSummary() + "\"";
         return message;
     }
 

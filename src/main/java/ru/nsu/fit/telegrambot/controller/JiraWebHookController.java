@@ -34,8 +34,11 @@ public class JiraWebHookController {
 
     @PostMapping(path = "/commentary")
     public void commentaryHook(@RequestBody JiraCommentEventDto event) {
+//    public void commentaryHook(@RequestBody String event) {
         log.debug("/commentary invoked");
 //        eventService.handleEvent(event);
+        eventService.handleCommentaryEvent(event);
+//        System.out.println(event);
     }
 
     @PostMapping(path = "/feature")
