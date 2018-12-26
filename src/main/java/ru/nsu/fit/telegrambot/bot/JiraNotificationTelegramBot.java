@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.bot.view.InlineKeyboardBuilder;
 import ru.nsu.fit.telegrambot.bot.view.TelegramBotView;
 import ru.nsu.fit.telegrambot.config.TelegramBotConfig;
+import ru.nsu.fit.telegrambot.model.Enums.MenuType;
 
 import java.util.List;
 
@@ -46,11 +47,11 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         manager = new TelegramBotView();
         manager.setColumnsCount(2);
 
-        manager.addMenuItem("type1", "action 1");
-        manager.addMenuItem("type2", "action 2");
-        manager.addMenuItem("type3", "action 3");
-        manager.addMenuItem("type4", "action 4");
-        manager.addMenuItem("cancel", "cancel");
+        manager.addMenuItem("Issue", "issue");
+        manager.addMenuItem("Feature", "feature");
+        manager.addMenuItem("Sprint", "sprint");
+        manager.addMenuItem("Comment", "comment");
+        manager.addMenuItem("Cancel", "cancel");
 
         manager.init();
     }
@@ -59,11 +60,50 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         manager = new TelegramBotView();
         manager.setColumnsCount(2);
 
-        manager.addMenuItem("create", "issueaction 1");
-        manager.addMenuItem("update", "issueaction 2");
-        manager.addMenuItem("delete", "issueaction 3");
-        manager.addMenuItem("diman - valet", "issueaction 4");
-        manager.addMenuItem("cancel", "cancel");
+        manager.addMenuItem("Create", "issuecreate");
+        manager.addMenuItem("Update", "issueuptade");
+        manager.addMenuItem("Delete", "issuedelete");
+        manager.addMenuItem("Worklog", "issueworklog");
+        manager.addMenuItem("Back", "back");
+
+        manager.init();
+    }
+    private void initComment() {
+
+        manager = new TelegramBotView();
+        manager.setColumnsCount(2);
+
+        manager.addMenuItem("Create", "issueaction 1");
+        manager.addMenuItem("Update", "issueaction 2");
+        manager.addMenuItem("Delete", "issueaction 3");
+        manager.addMenuItem("Back", "back");
+
+        manager.init();
+    }
+    private void initFeature() {
+
+        manager = new TelegramBotView();
+        manager.setColumnsCount(2);
+
+        manager.addMenuItem("Watch", "featurewatch");
+        manager.addMenuItem("Watch Issue", "featurewatchissue");
+        manager.addMenuItem("Subtask", "featuresubtask");
+        manager.addMenuItem("Attachment", "featureattachment");
+        manager.addMenuItem("Back", "back");
+
+
+        manager.init();
+    }
+    private void initSprint() {
+
+        manager = new TelegramBotView();
+        manager.setColumnsCount(2);
+
+        manager.addMenuItem("Create", "sprintcreate");
+        manager.addMenuItem("Update", "sprintupdate");
+        manager.addMenuItem("Delete", "sprintdelete");
+        manager.addMenuItem("Start", "sprintstart");
+        manager.addMenuItem("Back", "back");
 
         manager.init();
     }
@@ -89,11 +129,23 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
             long chatId = update.getCallbackQuery().getMessage().getChatId();
             String callData = update.getCallbackQuery().getData();
             long messageId = update.getCallbackQuery().getMessage().getMessageId();
-            if (callData.equals("action 1")) {
+            if (callData.equals("back"))
+                renderMenu(update, MenuType.MAIN_MENU);
+            if (callData.equals("issue")) {
 
                 initIssue();
                 InlineKeyboardBuilder builder = manager.createMenuForPage(0);
                 builder.setChatId(chatId).setText("Issue notifications configuration:");
+                SendMessage message = builder.build();
+                replaceMessage(chatId, messageId, message);
+
+                return;
+            }
+            if (callData.equals("feature")) {
+
+                initIssue();
+                InlineKeyboardBuilder builder = manager.createMenuForPage(0);
+                builder.setChatId(chatId).setText("Feature notifications configuration:");
                 SendMessage message = builder.build();
                 replaceMessage(chatId, messageId, message);
 
@@ -114,24 +166,46 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         } else if (update.hasMessage() && update.getMessage().hasText()) {
 
             if (update.getMessage().getText().equals("/menu") || update.getMessage().getText().equals("/start")) {
-
-                long chatId = update.getMessage().getChatId();
-                initMenu();
-                InlineKeyboardBuilder builder = manager.createMenuForPage(0);
-                builder.setChatId(chatId).setText("Choose action:");
-                SendMessage message = builder.build();
-
-                try {
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+                renderMenu(update, MenuType.MAIN_MENU);
             }
         }
     }
 
 
+    private void renderMenu(Update update, MenuType type){
+        long chatId = update.getMessage().getChatId();
+        InlineKeyboardBuilder builder = manager.createMenuForPage(0);
 
+        switch (type){
+            case MAIN_MENU:
+                builder.setChatId(chatId).setText("Which type of notification you want to configure:");
+                initMenu();
+                break;
+            case ISSUE:
+                builder.setChatId(chatId).setText("Issue notifications configurations:");
+                initIssue();
+                break;
+            case SPRINT:
+                builder.setChatId(chatId).setText("Sprint notifications configurations:");
+                initSprint();
+                break;
+            case COMMENT:
+                builder.setChatId(chatId).setText("Comment notifications configurations:");
+                initComment();
+                break;
+            case FEATURE:
+                builder.setChatId(chatId).setText("Feature notifications configurations:");
+                initFeature();
+                break;
+        }
+        SendMessage message = builder.build();
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onUpdatesReceived(List<Update> updates) {
         for (Update update: updates) {
