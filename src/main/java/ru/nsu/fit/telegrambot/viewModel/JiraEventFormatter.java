@@ -1,9 +1,6 @@
 package ru.nsu.fit.telegrambot.viewModel;
 
-import ru.nsu.fit.telegrambot.dto.JiraCommentEventDto;
-import ru.nsu.fit.telegrambot.dto.JiraEventDto;
-import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
-import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
+import ru.nsu.fit.telegrambot.dto.*;
 import ru.nsu.fit.telegrambot.dto.addition.issueInformation.JiraIssueDto;
 
 public class JiraEventFormatter {
@@ -12,6 +9,10 @@ public class JiraEventFormatter {
         message += " " + parseEventType(event);
         message += " " + partIssueMessage(event.getIssue()) + ".";
         return message;
+    }
+
+    public String parseFeatureEvent(JiraFeatureEventDto event) {
+        return partIssueMessage(event.getIssue());
     }
 
     public String parseSprintEvent(JiraSprintEventDto event) {

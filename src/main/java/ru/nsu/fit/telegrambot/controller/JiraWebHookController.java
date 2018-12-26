@@ -40,6 +40,7 @@ public class JiraWebHookController {
     @PostMapping(path = "/feature")
     public void featureHook(@RequestBody JiraFeatureEventDto event) {
         log.debug("/feature invoked");
+        eventService.handleFeatureEvent(event);
     }
 
     @PostMapping(path = "/issue")
