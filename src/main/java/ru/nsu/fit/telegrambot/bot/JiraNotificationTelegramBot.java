@@ -45,6 +45,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
     private void initMenu() {
         manager = new TelegramBotView();
+
         manager.setColumnsCount(2);
 
         manager.addMenuItem("Issue", "issue");
@@ -73,9 +74,9 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         manager = new TelegramBotView();
         manager.setColumnsCount(2);
 
-        manager.addMenuItem("Create", "issueaction 1");
-        manager.addMenuItem("Update", "issueaction 2");
-        manager.addMenuItem("Delete", "issueaction 3");
+        manager.addMenuItem("Create", "commentcreate");
+        manager.addMenuItem("Update", "commentupdate");
+        manager.addMenuItem("Delete", "commentdelete");
         manager.addMenuItem("Back", "back");
 
         manager.init();
@@ -90,7 +91,6 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         manager.addMenuItem("Subtask", "featuresubtask");
         manager.addMenuItem("Attachment", "featureattachment");
         manager.addMenuItem("Back", "back");
-
 
         manager.init();
     }
@@ -161,7 +161,6 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
                 return;
             }
 
-
             InlineKeyboardBuilder builder = manager.createMenuForPage(pageId);
 
             builder.setChatId(chatId).setText("Choose action:");
@@ -192,30 +191,37 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         if (update.hasCallbackQuery())
             chatId = update.getCallbackQuery().getMessage().getChatId();
 
-        InlineKeyboardBuilder builder = manager.createMenuForPage(0);
+        InlineKeyboardBuilder builder;
 
         switch (type){
             case MAIN_MENU:
-                builder.setChatId(chatId).setText("Which type of notification you want to configure:");
                 initMenu();
+                builder = manager.createMenuForPage(0);
+                builder.setChatId(chatId).setText("Which type of notification you want to configure:");
                 break;
             case ISSUE:
-                builder.setChatId(chatId).setText("Issue notifications configurations:");
                 initIssue();
+                builder = manager.createMenuForPage(0);
+                builder.setChatId(chatId).setText("Issue notifications configurations:");
                 break;
             case SPRINT:
-                builder.setChatId(chatId).setText("Sprint notifications configurations:");
                 initSprint();
+                builder = manager.createMenuForPage(0);
+                builder.setChatId(chatId).setText("Sprint notifications configurations:");
                 break;
             case COMMENT:
-                builder.setChatId(chatId).setText("Comment notifications configurations:");
                 initComment();
+                builder = manager.createMenuForPage(0);
+                builder.setChatId(chatId).setText("Comment notifications configurations:");
                 break;
             case FEATURE:
-                builder.setChatId(chatId).setText("Feature notifications configurations:");
                 initFeature();
+                builder = manager.createMenuForPage(0);
+                builder.setChatId(chatId).setText("Feature notifications configurations:");
                 break;
+                default: builder = manager.createMenuForPage(0);
         }
+
         return builder.build();
     }
     @Override
