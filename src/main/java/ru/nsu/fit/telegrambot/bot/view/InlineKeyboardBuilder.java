@@ -56,5 +56,4 @@ public class InlineKeyboardBuilder {
 
             return message;
         }
-
     }

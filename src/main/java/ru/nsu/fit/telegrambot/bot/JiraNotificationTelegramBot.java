@@ -69,8 +69,41 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        System.out.println(update.hasCallbackQuery());
 
-        if (update.hasMessage() && update.getMessage().hasText()) {
+        if (update.hasCallbackQuery()) {
+            System.out.println("pokushay");
+
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+            String callData = update.getCallbackQuery().getData();
+            long messageId = update.getCallbackQuery().getMessage().getMessageId();
+            if (callData.equals("action 1")) {
+
+                EditMessageText newMessage = new EditMessageText()
+                        .setChatId(chatId)
+                        .setMessageId(Math.toIntExact(messageId))
+                        .setText("action1");
+                System.out.println("e boi");
+                try {
+                    execute(newMessage);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (callData.equals(TelegramBotView.CANCEL_ACTION)) {
+                replaceMessageWithText(chatId, messageId, "Cancelled.");
+
+            }
+            int pageId = 0;
+            InlineKeyboardBuilder builder = manager.createMenuForPage(pageId);
+
+            builder.setChatId(chatId).setText("Choose action:");
+            SendMessage message = builder.build();
+
+            replaceMessage(chatId, messageId, message);
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
+            System.out.println("pokushay1");
+
 
             if (update.getMessage().getText().equals("/menu")) {
 
@@ -88,37 +121,9 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
 
-            } else if (update.hasCallbackQuery()) {
-
-                long chatId = update.getCallbackQuery().getMessage().getChatId();
-                String callData = update.getCallbackQuery().getData();
-                long messageId = update.getCallbackQuery().getMessage().getMessageId();
-
-                if (callData.equals("action 1")){
-                    EditMessageText newMessage = new EditMessageText()
-                            .setChatId(chatId)
-                            .setMessageId(Math.toIntExact(messageId))
-                            .setText("action1");
-                    try {
-                        execute(newMessage);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (callData.equals(TelegramBotView.CANCEL_ACTION)) {
-                    replaceMessageWithText(chatId, messageId, "Cancelled.");
-
-                }
-                int pageId = 0;
-                InlineKeyboardBuilder builder = manager.createMenuForPage(pageId);
-
-                builder.setChatId(chatId).setText("Choose action:");
-                SendMessage message = builder.build();
-
-                replaceMessage(chatId, messageId, message);
-                }
             }
         }
+    }
 
 
 

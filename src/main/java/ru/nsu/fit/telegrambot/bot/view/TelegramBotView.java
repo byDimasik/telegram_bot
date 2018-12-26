@@ -3,12 +3,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TelegramBotView {
-    public static final String PREV_ACTION = "page-prev";
-    public static final String NEXT_ACTION = "page-next";
     public static final String CANCEL_ACTION = "cancel";
 
     private int buttonsPerPage = 6;
-    public void setButtonsPerPage(int buttonsPerPage) {
+    private void setButtonsPerPage(int buttonsPerPage) {
         this.buttonsPerPage = buttonsPerPage;
     }
 
