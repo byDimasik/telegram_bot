@@ -40,7 +40,7 @@ public class UserRegistrationService {
 
             if (!eventRepository.findById(chatId).isPresent()) {
                 log.debug("Received update from unregister user with chat id: [{}]", chatId);
-                EventModel eventModel = new EventModel(chatId);
+                EventModel eventModel = EventModel.builder().chatId(chatId).build();
                 eventRepository.save(eventModel);
                 log.debug("User has been successfully registered with chat id: [{}]", chatId);
             }
