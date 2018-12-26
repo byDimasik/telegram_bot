@@ -8,5 +8,4 @@ import lombok.Data;
 public class JiraIssueDto {
     private JiraIssuesFieldsDto fields;
     private String key;
-    private String summary;
 }
