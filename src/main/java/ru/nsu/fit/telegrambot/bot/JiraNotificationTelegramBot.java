@@ -82,6 +82,8 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
             try {
                 CallBackEventType callBackEventType = CallBackEventType.valueOf(callData.toUpperCase());
                 callBackService.procesCallBackEvent(chatId, callBackEventType);
+                SendMessage message = renderMenu(update, callBackEventType.getMenuType());
+                replaceMessage(chatId, messageId, message);
                 return;
             } catch (IllegalArgumentException e) {
                 log.trace("Callback is not a event type");
