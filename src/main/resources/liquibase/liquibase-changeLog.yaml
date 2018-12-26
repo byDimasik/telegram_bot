@@ -3,3 +3,5 @@ databaseChangeLog:
       file: liquibase/change-set-001.yaml
   - include:
       file: liquibase/change-set-002.yaml
+  - include:
+      file: liquibase/change-set-003.yaml

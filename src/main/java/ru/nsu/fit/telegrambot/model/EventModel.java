@@ -1,6 +1,7 @@
 package ru.nsu.fit.telegrambot.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,14 +11,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
+/**
+ * Event model
+ */
 @Data
 @Entity
+@Builder
 @Table(name = "event")
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventModel implements Serializable {
-
-    private static final Boolean COLUMN_DEFAULT = true;
 
     @Id
     @Column(name = "chat_id")
@@ -35,7 +38,28 @@ public class EventModel implements Serializable {
     @Column(name = "issue_worklog")
     private Boolean issueWorkLog;
 
-    public EventModel(Long chatId) {
-        this(chatId, COLUMN_DEFAULT, COLUMN_DEFAULT, COLUMN_DEFAULT, COLUMN_DEFAULT);
-    }
+    @Column(name = "comment_create")
+    private Boolean commentCreate;
+
+    @Column(name = "comment_update")
+    private Boolean commentUpdate;
+
+    @Column(name = "comment_delete")
+    private Boolean commentDelete;
+
+    @Column(name = "sprint_create")
+    private Boolean sprintCreate;
+
+    @Column(name = "sprint_update")
+    private Boolean sprintUpdate;
+
+    @Column(name = "sprint_delete")
+    private Boolean sprintDelete;
+
+    @Column(name = "sprint_start")
+    private Boolean sprintStart;
+
+    @Column(name = "sprint_close")
+    private Boolean sprintClose;
+
 }
