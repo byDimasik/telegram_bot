@@ -2,7 +2,7 @@ package ru.nsu.fit.telegrambot.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import ru.nsu.fit.telegrambot.dto.addition.JiraIssueDto;
+import ru.nsu.fit.telegrambot.dto.addition.issueInformation.JiraIssueDto;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

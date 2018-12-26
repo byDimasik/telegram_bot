@@ -1,4 +1,4 @@
-package ru.nsu.fit.telegrambot.dto.addition;
+package ru.nsu.fit.telegrambot.dto.addition.issueInformation;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
