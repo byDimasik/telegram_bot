@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.bot.JiraNotificationTelegramBot;
 import ru.nsu.fit.telegrambot.dto.JiraEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
+import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
 import ru.nsu.fit.telegrambot.repository.EventRepository;
 import ru.nsu.fit.telegrambot.viewModel.JiraEventFormatter;
 
@@ -71,5 +72,10 @@ public class EventService {
     public void handleIssueEvent(JiraIssueEventDto event) {
 //        handleMessage(eventFormatter.parseIssueEvent(event));
         System.out.println(eventFormatter.parseIssueEvent(event));
+    }
+
+    public void handleSprintEvent(JiraSprintEventDto event) {
+//        handleMessage(eventFormatter.parseIssueEvent(event));
+//        System.out.println(eventFormatter.parseIssueEvent(event));
     }
 }

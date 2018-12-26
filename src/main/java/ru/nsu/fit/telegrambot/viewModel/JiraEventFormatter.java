@@ -2,6 +2,7 @@ package ru.nsu.fit.telegrambot.viewModel;
 
 import ru.nsu.fit.telegrambot.dto.JiraEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
+import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
 
 public class JiraEventFormatter {
     public String parseIssueEvent(JiraIssueEventDto event) {
@@ -10,6 +11,16 @@ public class JiraEventFormatter {
         message += " " + event.getIssue().getFields().getIssuetype().getName().toLowerCase();
         message += " " + event.getIssue().getKey();
         message += " \"" + event.getIssue().getFields().getSummary() + "\"";
+        return message;
+    }
+
+    public String parseSprintEvent(JiraSprintEventDto event) {
+        String message = "Sprint ";
+        message += " " + event.getSprint().getName();
+        message += " with state " + event.getSprint().getState();
+        if(event.getSprint().getGoal() != null) {
+            message += " with goal " + event.getSprint().getGoal();
+        }
         return message;
     }
 
@@ -22,6 +33,10 @@ public class JiraEventFormatter {
             resultMessage = "update";
         } else if (eventType.contains("deleted")){
             resultMessage = "delete";
+        } else if (eventType.contains("started")) {
+            resultMessage = "started";
+        } else if (eventType.contains("closed")) {
+            resultMessage = "closed";
         }
         return resultMessage;
     }
