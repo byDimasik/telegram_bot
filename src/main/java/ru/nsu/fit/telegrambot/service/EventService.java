@@ -10,6 +10,7 @@ import ru.nsu.fit.telegrambot.dto.JiraCommentEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraFeatureEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
+import ru.nsu.fit.telegrambot.model.EventModel;
 import ru.nsu.fit.telegrambot.repository.EventRepository;
 import ru.nsu.fit.telegrambot.viewModel.JiraEventFormatter;
 import ru.nsu.fit.telegrambot.viewModel.JiraEventTypeWithMessage;
@@ -46,24 +47,10 @@ public class EventService {
      *
      * @param eventText formatted jira event text
      */
-    private void handleMessage(String eventText) {
-        eventRepository.findAll().forEach(event -> {
-            SendMessage sendMessage = new SendMessage()
-                    .setChatId(event.getChatId())
-                    .setText(eventText);
-
-            try {
-                bot.execute(sendMessage);
-            } catch (TelegramApiException e) {
-                log.error("Cant execute SendMessage", e);
-            }
-        });
-    }
-
-    private void handleTypedMessage(List<Long> chats, String eventText) {
+    private void handleTypedMessage(List<EventModel> chats, String eventText) {
         chats.forEach(event -> {
             SendMessage sendMessage = new SendMessage()
-                    .setChatId(event)
+                    .setChatId(event.getChatId())
                     .setText(eventText);
             try {
                 bot.execute(sendMessage);
@@ -75,7 +62,7 @@ public class EventService {
 
     public void handleIssueEvent(JiraIssueEventDto event) {
         JiraEventTypeWithMessage typedMessage = eventFormatter.parseIssueEvent(event);
-        List<Long> resultList = new ArrayList<>();
+        List<EventModel> resultList = new ArrayList<>();
         switch (typedMessage.getType()) {
             case ISSUE_CREATE:
                 resultList = eventRepository.findAllChatIdByIssueCreateIs(true);
@@ -96,7 +83,7 @@ public class EventService {
 
     public void handleSprintEvent(JiraSprintEventDto event) {
         JiraEventTypeWithMessage typedMessage = eventFormatter.parseSprintEvent(event);
-        List<Long> resultList = new ArrayList<>();
+        List<EventModel> resultList = new ArrayList<>();
         switch (typedMessage.getType()) {
             case SPRINT_CREATE:
                 resultList = eventRepository.findAllChatIdBySprintCreateIs(true);
@@ -123,7 +110,7 @@ public class EventService {
 
     public void handleCommentaryEvent(JiraCommentEventDto event) {
         JiraEventTypeWithMessage typedMessage = eventFormatter.parseCommentaryEvent(event);
-        List<Long> resultList = new ArrayList<>();
+        List<EventModel> resultList = new ArrayList<>();
         switch (typedMessage.getType()) {
             case COMMENT_CREATE:
                 resultList = eventRepository.findAllChatIdByCommentCreateIs(true);
@@ -144,6 +131,5 @@ public class EventService {
 
     public void handleFeatureEvent(JiraFeatureEventDto event) {
         JiraEventTypeWithMessage typedMessage = eventFormatter.parseFeatureEvent(event);
-        handleMessage(typedMessage.getMessage());
     }
 }
