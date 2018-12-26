@@ -16,15 +16,35 @@ public class JiraEventFormatter {
         return partIssueMessage(event.getIssue());
     }
 
-    public String parseSprintEvent(JiraSprintEventDto event) {
+    public JiraEventTypeWithMessage parseSprintEvent(JiraSprintEventDto event) {
+        JiraEventTypeWithMessage result = new JiraEventTypeWithMessage();
         String message = "Sprint";
+        String messageType = parseEventType(event);
         message += " \"" + event.getSprint().getName() + "\"";
-        message += " " + parseEventType(event);
+        message += " " + messageType;
         message += ". State - \"" + event.getSprint().getState() + "\"";
         if(event.getSprint().getGoal() != null) {
             message += ". Goal - \"" + event.getSprint().getGoal() +"\".";
         }
-        return message;
+        switch (messageType) {
+            case "create":
+                result.setType(CallBackEventType.SPRINT_CREATE);
+                break;
+            case "update":
+                result.setType(CallBackEventType.SPRINT_UPDATE);
+                break;
+            case "delete":
+                result.setType(CallBackEventType.SPRINT_DELETE);
+                break;
+            case "start":
+                result.setType(CallBackEventType.SPRINT_START);
+            case "close":
+                result.setType(CallBackEventType.SPRINT_CLOSE);
+            default:
+                break;
+        }
+        result.setMessage(message);
+        return result;
     }
 
     public JiraEventTypeWithMessage parseCommentaryEvent(JiraCommentEventDto event) {

@@ -78,7 +78,30 @@ public class EventService {
     }
 
     public void handleSprintEvent(JiraSprintEventDto event) {
-        handleMessage(eventFormatter.parseSprintEvent(event));
+        JiraEventTypeWithMessage typedMessage = eventFormatter.parseSprintEvent(event);
+        List<Long> resultList = new ArrayList<>();
+        switch (typedMessage.getType()) {
+            case SPRINT_CREATE:
+                resultList = eventRepository.findAllChatIdBySprintCreateIs(true);
+                break;
+            case SPRINT_DELETE:
+                resultList = eventRepository.findAllChatIdBySprintDeleteIs(true);
+                break;
+            case SPRINT_START:
+                resultList = eventRepository.findAllChatIdBySprintStartIs(true);
+                break;
+            case SPRINT_UPDATE:
+                resultList = eventRepository.findAllChatIdBySprintUpdateIs(true);
+                break;
+            case SPRINT_CLOSE:
+                resultList = eventRepository.findAllChatIdBySprintCloseIs(true);
+                break;
+            default:
+                break;
+        }
+        if (resultList.size() != 0) {
+            handleTypedMessage(resultList, typedMessage.getMessage());
+        }
     }
 
     public void handleCommentaryEvent(JiraCommentEventDto event) {
@@ -100,7 +123,6 @@ public class EventService {
         if (resultList.size() != 0) {
             handleTypedMessage(resultList, typedMessage.getMessage());
         }
-//        handleMessage(typedMessage.getMessage());
     }
 
     public void handleFeatureEvent(JiraFeatureEventDto event) {
