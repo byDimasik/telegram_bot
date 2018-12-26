@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: d.lavrinenko
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - columnExists:
+              tableName: event
+              columnName: comment_create
+          - columnExists:
+              tableName: event
+              columnName: comment_update
+          - columnExists:
+              tableName: event
+              columnName: comment_delete
+          - columnExists:
+              tableName: event
+              columnName: sprint_create
+          - columnExists:
+              tableName: event
+              columnName: sprint_update
+          - columnExists:
+              tableName: event
+              columnName: sprint_delete
+          - columnExists:
+              tableName: event
+              columnName: sprint_start
+          - columnExists:
+              tableName: event
+              columnName: sprint_close
+      changes:
+        - addColumn:
+            tableName: event
+            columns:
+              - column:
+                  name: comment_create
+                  type: boolean
+              - column:
+                  name: comment_update
+                  type: boolean
+              - column:
+                  name: comment_delete
+                  type: boolean
+              - column:
+                  name: sprint_create
+                  type: boolean
+              - column:
+                  name: sprint_update
+                  type: boolean
+              - column:
+                  name: sprint_delete
+                  type: boolean
+              - column:
+                  name: sprint_start
+                  type: boolean
+              - column:
+                  name: sprint_close
+                  type: boolean

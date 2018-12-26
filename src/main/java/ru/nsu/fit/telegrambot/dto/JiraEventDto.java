@@ -5,5 +5,6 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JiraCommnetEventDto {
+public class JiraEventDto {
+    private String webhookEvent;
 }
