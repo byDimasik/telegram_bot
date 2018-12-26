@@ -67,4 +67,44 @@ public interface EventRepository extends CrudRepository<EventModel, Long> {
      * @return list of chat ids
      */
     List<Long> findAllChatIdByCommentDeleteIs(Boolean commentDelete);
+
+    /**
+     * Find all chat ids to send sprint create event
+     *
+     * @param sprintCreate sprint create flag
+     * @return list of chat ids
+     */
+    List<Long> findAllChatIdBySprintCreateIs(Boolean sprintCreate);
+
+    /**
+     * Find all chat ids to send sprint update event
+     *
+     * @param sprintUpdate sprint update flag
+     * @return list of chat ids
+     */
+    List<Long> findAllChatIdBySprintUpdateIs(Boolean sprintUpdate);
+
+    /**
+     * Find all chat ids to send sprint delete event
+     *
+     * @param sprintDelete sprint delete flag
+     * @return list of chat ids
+     */
+    List<Long> findAllChatIdBySprintDeleteIs(Boolean sprintDelete);
+
+    /**
+     * Find all chat ids to send sprint start event
+     *
+     * @param sprintStart sprint start flag
+     * @return list of chat ids
+     */
+    List<Long> findAllChatIdBySprintStartIs(Boolean sprintStart);
+
+    /**
+     * Find all chat ids to send sprint close event
+     *
+     * @param sprintClose sprint close flag
+     * @return list of chat ids
+     */
+    List<Long> findAllChatIdBySprintCloseIs(Boolean sprintClose);
 }
