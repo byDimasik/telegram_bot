@@ -6,8 +6,12 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.bot.JiraNotificationTelegramBot;
-import ru.nsu.fit.telegrambot.dto.JiraEventDto;
+import ru.nsu.fit.telegrambot.dto.JiraCommentEventDto;
+import ru.nsu.fit.telegrambot.dto.JiraFeatureEventDto;
+import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
+import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
 import ru.nsu.fit.telegrambot.repository.EventRepository;
+import ru.nsu.fit.telegrambot.viewModel.JiraEventFormatter;
 
 /**
  * Event service
@@ -18,6 +22,7 @@ public class EventService {
 
     private final JiraNotificationTelegramBot bot;
     private final EventRepository eventRepository;
+    private final JiraEventFormatter eventFormatter = new JiraEventFormatter();
 
     /**
      * Constructor with spring dependency injection
@@ -33,15 +38,15 @@ public class EventService {
     }
 
     /**
-     * Handle common event
+     * Handle common fromatted event message
      *
-     * @param jiraEventDto common jira event
+     * @param eventText formatted jira event text
      */
-    public void handleEvent(JiraEventDto jiraEventDto) {
+    private void handleMessage(String eventText) {
         eventRepository.findAll().forEach(event -> {
             SendMessage sendMessage = new SendMessage()
                     .setChatId(event.getChatId())
-                    .setText(jiraEventDto.getWebhookEvent());
+                    .setText(eventText);
 
             try {
                 bot.execute(sendMessage);
@@ -49,5 +54,21 @@ public class EventService {
                 log.error("Cant execute SendMessage", e);
             }
         });
+    }
+
+    public void handleIssueEvent(JiraIssueEventDto event) {
+        handleMessage(eventFormatter.parseIssueEvent(event));
+    }
+
+    public void handleSprintEvent(JiraSprintEventDto event) {
+        handleMessage(eventFormatter.parseSprintEvent(event));
+    }
+
+    public void handleCommentaryEvent(JiraCommentEventDto event) {
+        handleMessage(eventFormatter.parseCommentaryEvent(event));
+    }
+
+    public void handleFeatureEvent(JiraFeatureEventDto event) {
+        handleMessage(eventFormatter.parseFeatureEvent(event));
     }
 }
