@@ -4,6 +4,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.nsu.fit.telegrambot.bot.view.InlineKeyboardBuilder;
 import ru.nsu.fit.telegrambot.bot.view.TelegramBotView;
 
+import static ru.nsu.fit.telegrambot.model.enums.CallBackEventType.*;
+
 public enum MenuType {
 
     BACK("Which type of notification you want to configure:") {
@@ -27,11 +29,11 @@ public enum MenuType {
         public SendMessage renderMenu(TelegramBotView manager, Long chatId) {
             manager.setColumnsCount(2);
 
-            manager.addMenuItem("Create", "issuecreate");
-            manager.addMenuItem("Update", "issueuptade");
-            manager.addMenuItem("Delete", "issuedelete");
-            manager.addMenuItem("Worklog", "issueworklog");
-            manager.addMenuItem("Back", "back");
+            manager.addMenuItem(ISSUE_CREATE.getButtonText(), ISSUE_CREATE.name());
+            manager.addMenuItem(ISSUE_UPDATE.getButtonText(), ISSUE_UPDATE.name());
+            manager.addMenuItem(ISSUE_DELETE.getButtonText(), ISSUE_DELETE.name());
+            manager.addMenuItem(ISSUE_WORK_LOG.getButtonText(), ISSUE_WORK_LOG.name());
+            manager.addMenuItem(CallBackEventType.BACK.getButtonText(), CallBackEventType.BACK.name());
 
             manager.init();
 
@@ -43,11 +45,11 @@ public enum MenuType {
         public SendMessage renderMenu(TelegramBotView manager, Long chatId) {
             manager.setColumnsCount(2);
 
-            manager.addMenuItem("Create", "sprintcreate");
-            manager.addMenuItem("Update", "sprintupdate");
-            manager.addMenuItem("Delete", "sprintdelete");
-            manager.addMenuItem("Start", "sprintstart");
-            manager.addMenuItem("Back", "back");
+            manager.addMenuItem(SPRINT_CREATE.getButtonText(), SPRINT_CREATE.name());
+            manager.addMenuItem(SPRINT_UPDATE.getButtonText(), SPRINT_UPDATE.name());
+            manager.addMenuItem(SPRINT_DELETE.getButtonText(), SPRINT_DELETE.name());
+            manager.addMenuItem(SPRINT_START.getButtonText(), SPRINT_START.name());
+            manager.addMenuItem(CallBackEventType.BACK.getButtonText(), CallBackEventType.BACK.name());
 
             manager.init();
 
@@ -63,7 +65,7 @@ public enum MenuType {
             manager.addMenuItem("Watch Issue", "featurewatchissue");
             manager.addMenuItem("Subtask", "featuresubtask");
             manager.addMenuItem("Attachment", "featureattachment");
-            manager.addMenuItem("Back", "back");
+            manager.addMenuItem(CallBackEventType.BACK.getButtonText(), CallBackEventType.BACK.name());
 
             manager.init();
 
@@ -75,10 +77,10 @@ public enum MenuType {
         public SendMessage renderMenu(TelegramBotView manager, Long chatId) {
             manager.setColumnsCount(2);
 
-            manager.addMenuItem("Create", "commentcreate");
-            manager.addMenuItem("Update", "commentupdate");
-            manager.addMenuItem("Delete", "commentdelete");
-            manager.addMenuItem("Back", "back");
+            manager.addMenuItem(COMMENT_CREATE.getButtonText(), COMMENT_CREATE.name());
+            manager.addMenuItem(COMMENT_UPDATE.getButtonText(), COMMENT_UPDATE.name());
+            manager.addMenuItem(COMMENT_DELETE.getButtonText(), COMMENT_DELETE.name());
+            manager.addMenuItem(CallBackEventType.BACK.getButtonText(), CallBackEventType.BACK.name());
 
             manager.init();
 
