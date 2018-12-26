@@ -13,6 +13,14 @@ import java.util.List;
 public interface EventRepository extends CrudRepository<EventModel, Long> {
 
     /**
+     * Find {@link EventModel} by primary key - chat id
+     *
+     * @param chatId chat id
+     * @return event model
+     */
+    EventModel findByChatId(Long chatId);
+
+    /**
      * Find all chat ids to send issue create event
      *
      * @param issueCreate issue create flag
