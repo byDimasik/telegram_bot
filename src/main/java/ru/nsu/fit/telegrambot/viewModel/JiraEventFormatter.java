@@ -15,11 +15,12 @@ public class JiraEventFormatter {
     }
 
     public String parseSprintEvent(JiraSprintEventDto event) {
-        String message = "Sprint ";
-        message += " " + event.getSprint().getName();
-        message += " with state " + event.getSprint().getState();
+        String message = "Sprint";
+        message += " \"" + event.getSprint().getName() + "\"";
+        message += " " + parseEventType(event);
+        message += ". State - \"" + event.getSprint().getState() + "\"";
         if(event.getSprint().getGoal() != null) {
-            message += " with goal " + event.getSprint().getGoal();
+            message += ". Goal - \"" + event.getSprint().getGoal() +"\"";
         }
         return message;
     }

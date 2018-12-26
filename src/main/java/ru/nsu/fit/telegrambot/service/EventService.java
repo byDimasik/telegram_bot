@@ -76,6 +76,6 @@ public class EventService {
 
     public void handleSprintEvent(JiraSprintEventDto event) {
 //        handleMessage(eventFormatter.parseIssueEvent(event));
-//        System.out.println(eventFormatter.parseIssueEvent(event));
+        System.out.println(eventFormatter.parseSprintEvent(event));
     }
 }
