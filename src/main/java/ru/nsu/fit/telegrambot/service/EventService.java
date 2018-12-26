@@ -54,7 +54,6 @@ public class EventService {
                     .setText(eventText);
             try {
                 bot.execute(sendMessage);
-                System.out.println("messge =" + sendMessage);
             } catch (TelegramApiException e) {
                 log.error("Cant execute SendMessage", e);
             }
