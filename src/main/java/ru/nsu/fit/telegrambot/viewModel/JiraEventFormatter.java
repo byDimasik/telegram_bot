@@ -28,8 +28,10 @@ public class JiraEventFormatter {
         return result;
     }
 
-    public String parseFeatureEvent(JiraFeatureEventDto event) {
-        return partIssueMessage(event.getIssue());
+    public JiraEventTypeWithMessage parseFeatureEvent(JiraFeatureEventDto event) {
+        JiraIssueEventDto tempDto = new JiraIssueEventDto();
+        tempDto.setIssue(event.getIssue());
+        return parseIssueEvent(tempDto);
     }
 
     public JiraEventTypeWithMessage parseSprintEvent(JiraSprintEventDto event) {

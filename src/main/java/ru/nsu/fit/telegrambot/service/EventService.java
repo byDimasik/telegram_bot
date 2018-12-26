@@ -143,6 +143,7 @@ public class EventService {
     }
 
     public void handleFeatureEvent(JiraFeatureEventDto event) {
-        handleMessage(eventFormatter.parseFeatureEvent(event));
+        JiraEventTypeWithMessage typedMessage = eventFormatter.parseFeatureEvent(event);
+        handleMessage(typedMessage.getMessage());
     }
 }
