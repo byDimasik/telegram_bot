@@ -58,21 +58,17 @@ public class EventService {
 
     public void handleIssueEvent(JiraIssueEventDto event) {
         handleMessage(eventFormatter.parseIssueEvent(event));
-//        System.out.println(eventFormatter.parseIssueEvent(event));
     }
 
     public void handleSprintEvent(JiraSprintEventDto event) {
         handleMessage(eventFormatter.parseSprintEvent(event));
-//        System.out.println(eventFormatter.parseSprintEvent(event));
     }
 
     public void handleCommentaryEvent(JiraCommentEventDto event) {
         handleMessage(eventFormatter.parseCommentaryEvent(event));
-//        System.out.println(eventFormatter.parseCommentaryEvent(event));
     }
 
     public void handleFeatureEvent(JiraFeatureEventDto event) {
         handleMessage(eventFormatter.parseFeatureEvent(event));
-//        System.out.println(eventFormatter.parseIssueEvent(event));
     }
 }
