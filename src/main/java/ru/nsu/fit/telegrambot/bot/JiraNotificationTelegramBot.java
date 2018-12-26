@@ -50,32 +50,6 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         manager = new TelegramBotView();
     }
 
-
-    private void replaceMessageWithText(long chatId, long messageId, String text) {
-        EditMessageText newMessage = new EditMessageText()
-                .setChatId(chatId)
-                .setMessageId(Math.toIntExact(messageId))
-                .setText(text);
-        try {
-            execute(newMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void replaceMessage(long chatId, long messageId, SendMessage message) {
-        EditMessageText newMessage = new EditMessageText()
-                .setChatId(chatId)
-                .setMessageId(Math.toIntExact(messageId))
-                .setText(message.getText())
-                .setReplyMarkup((InlineKeyboardMarkup) message.getReplyMarkup());
-        try {
-            execute(newMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -125,10 +99,35 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
                 try {
                     execute(message);
                 } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                    log.error("Can not execute message", e);
                 }
 
             }
+        }
+    }
+
+    private void replaceMessageWithText(long chatId, long messageId, String text) {
+        EditMessageText newMessage = new EditMessageText()
+                .setChatId(chatId)
+                .setMessageId(Math.toIntExact(messageId))
+                .setText(text);
+        try {
+            execute(newMessage);
+        } catch (TelegramApiException e) {
+            log.error("Replace message with text error", e);
+        }
+    }
+
+    private void replaceMessage(long chatId, long messageId, SendMessage message) {
+        EditMessageText newMessage = new EditMessageText()
+                .setChatId(chatId)
+                .setMessageId(Math.toIntExact(messageId))
+                .setText(message.getText())
+                .setReplyMarkup((InlineKeyboardMarkup) message.getReplyMarkup());
+        try {
+            execute(newMessage);
+        } catch (TelegramApiException e) {
+            log.error("Replace message error", e);
         }
     }
 
