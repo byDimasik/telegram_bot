@@ -28,7 +28,7 @@ public class JiraEventFormatter {
     public String parseCommentaryEvent(JiraCommentEventDto event) {
         String message = event.getComment().getAuthor().getDisplayName();
         message += " commented on " + partIssueMessage(event.getIssue());
-        message += ". Commentary text \"" + event.getComment() + "\"";
+        message += ". Commentary text \"" + event.getComment().getBody() + "\"";
         return message;
     }
 
