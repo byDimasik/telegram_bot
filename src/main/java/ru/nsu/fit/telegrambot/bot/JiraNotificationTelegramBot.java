@@ -42,6 +42,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
     }
 
     public void init() {
+        manager = new TelegramBotView();
         manager.setColumnsCount(2);
 
         manager.addMenuItem("type1", "action 1");
@@ -78,9 +79,11 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
             if (callData.equals("action 1")) {
 
                 replaceMessageWithText(chatId, messageId, callData);
+                return;
             }
             if (callData.equals(TelegramBotView.CANCEL_ACTION)) {
                 replaceMessageWithText(chatId, messageId, "Cancelled.");
+                return;
 
             }
             int pageId = 0;
@@ -95,6 +98,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
             if (update.getMessage().getText().equals("/menu") || update.getMessage().getText().equals("/start")) {
 
                 long chatId = update.getMessage().getChatId();
+                init();
                 InlineKeyboardBuilder builder = manager.createMenuForPage(0);
                 builder.setChatId(chatId).setText("Choose action:");
                 SendMessage message = builder.build();
