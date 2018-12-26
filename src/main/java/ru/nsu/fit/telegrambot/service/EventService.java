@@ -74,7 +74,24 @@ public class EventService {
     }
 
     public void handleIssueEvent(JiraIssueEventDto event) {
-        handleMessage(eventFormatter.parseIssueEvent(event));
+        JiraEventTypeWithMessage typedMessage = eventFormatter.parseIssueEvent(event);
+        List<Long> resultList = new ArrayList<>();
+        switch (typedMessage.getType()) {
+            case ISSUE_CREATE:
+                resultList = eventRepository.findAllChatIdByIssueCreateIs(true);
+                break;
+            case ISSUE_DELETE:
+                resultList = eventRepository.findAllChatIdByIssueDeleteIs(true);
+                break;
+            case ISSUE_UPDATE:
+                resultList = eventRepository.findAllChatIdByIssueUpdateIs(true);
+                break;
+            default:
+                break;
+        }
+        if (resultList.size() != 0) {
+            handleTypedMessage(resultList, typedMessage.getMessage());
+        }
     }
 
     public void handleSprintEvent(JiraSprintEventDto event) {

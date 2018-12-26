@@ -5,11 +5,27 @@ import ru.nsu.fit.telegrambot.dto.addition.issueInformation.JiraIssueDto;
 import ru.nsu.fit.telegrambot.model.enums.CallBackEventType;
 
 public class JiraEventFormatter {
-    public String parseIssueEvent(JiraIssueEventDto event) {
+    public JiraEventTypeWithMessage parseIssueEvent(JiraIssueEventDto event) {
+        JiraEventTypeWithMessage result = new JiraEventTypeWithMessage();
+        String messageType = parseEventType(event);
         String message = event.getIssue().getFields().getCreator().getDisplayName();
-        message += " " + parseEventType(event);
+        message += " " + messageType;
         message += " " + partIssueMessage(event.getIssue()) + ".";
-        return message;
+        switch (messageType) {
+            case "create":
+                result.setType(CallBackEventType.ISSUE_CREATE);
+                break;
+            case "update":
+                result.setType(CallBackEventType.ISSUE_UPDATE);
+                break;
+            case "delete":
+                result.setType(CallBackEventType.ISSUE_DELETE);
+                break;
+            default:
+                break;
+        }
+        result.setMessage(message);
+        return result;
     }
 
     public String parseFeatureEvent(JiraFeatureEventDto event) {
@@ -18,8 +34,8 @@ public class JiraEventFormatter {
 
     public JiraEventTypeWithMessage parseSprintEvent(JiraSprintEventDto event) {
         JiraEventTypeWithMessage result = new JiraEventTypeWithMessage();
-        String message = "Sprint";
         String messageType = parseEventType(event);
+        String message = "Sprint";
         message += " \"" + event.getSprint().getName() + "\"";
         message += " " + messageType;
         message += ". State - \"" + event.getSprint().getState() + "\"";
@@ -49,8 +65,8 @@ public class JiraEventFormatter {
 
     public JiraEventTypeWithMessage parseCommentaryEvent(JiraCommentEventDto event) {
         JiraEventTypeWithMessage result = new JiraEventTypeWithMessage();
-        String message = event.getComment().getAuthor().getDisplayName();
         String messageType = parseEventType(event);
+        String message = event.getComment().getAuthor().getDisplayName();
         message += " " + messageType;
         message += " " + partIssueMessage(event.getIssue());
         message += ". Commentary text \"" + event.getComment().getBody() + "\".";
