@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JiraIssueDto {
-    private JiraIssuesFieldsDto fields;
+    private JiraIssueFieldsDto fields;
     private String key;
 }
