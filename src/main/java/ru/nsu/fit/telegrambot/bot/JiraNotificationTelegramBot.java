@@ -1,5 +1,6 @@
 package ru.nsu.fit.telegrambot.bot;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -11,7 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.bot.view.InlineKeyboardBuilder;
 import ru.nsu.fit.telegrambot.bot.view.TelegramBotView;
 import ru.nsu.fit.telegrambot.config.TelegramBotConfig;
-import ru.nsu.fit.telegrambot.model.Enums.MenuType;
+import ru.nsu.fit.telegrambot.model.enums.MenuType;
 import ru.nsu.fit.telegrambot.service.UserRegistrationService;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Jira Notification Telegram Bot
  */
+@Slf4j
 @Component
 public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
@@ -26,7 +28,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
     private final TelegramBotConfig telegramBotConfig;
     private final UserRegistrationService userRegistrationService;
 
-    private TelegramBotView manager = new TelegramBotView();
+    private TelegramBotView manager;
 
     /**
      * Constructor with spring dependency injection
@@ -39,7 +41,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
                                        UserRegistrationService userRegistrationService) {
         this.telegramBotConfig = telegramBotConfig;
         this.userRegistrationService = userRegistrationService;
-        initMenu();
+        manager = new TelegramBotView();
     }
 
 
@@ -55,76 +57,6 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-
-    private void initMenu() {
-        manager = new TelegramBotView();
-
-        manager.setColumnsCount(2);
-
-        manager.addMenuItem("Issue", "issue");
-        manager.addMenuItem("Feature", "feature");
-        manager.addMenuItem("Sprint", "sprint");
-        manager.addMenuItem("Comment", "comment");
-        manager.addMenuItem("Exit", "exit");
-
-        manager.init();
-    }
-
-    private void initIssue() {
-
-        manager = new TelegramBotView();
-        manager.setColumnsCount(2);
-
-        manager.addMenuItem("Create", "issuecreate");
-        manager.addMenuItem("Update", "issueuptade");
-        manager.addMenuItem("Delete", "issuedelete");
-        manager.addMenuItem("Worklog", "issueworklog");
-        manager.addMenuItem("Back", "back");
-
-        manager.init();
-    }
-
-    private void initComment() {
-
-        manager = new TelegramBotView();
-        manager.setColumnsCount(2);
-
-        manager.addMenuItem("Create", "commentcreate");
-        manager.addMenuItem("Update", "commentupdate");
-        manager.addMenuItem("Delete", "commentdelete");
-        manager.addMenuItem("Back", "back");
-
-        manager.init();
-    }
-
-    private void initFeature() {
-
-        manager = new TelegramBotView();
-        manager.setColumnsCount(2);
-
-        manager.addMenuItem("Watch", "featurewatch");
-        manager.addMenuItem("Watch Issue", "featurewatchissue");
-        manager.addMenuItem("Subtask", "featuresubtask");
-        manager.addMenuItem("Attachment", "featureattachment");
-        manager.addMenuItem("Back", "back");
-
-        manager.init();
-    }
-
-    private void initSprint() {
-
-        manager = new TelegramBotView();
-        manager.setColumnsCount(2);
-
-        manager.addMenuItem("Create", "sprintcreate");
-        manager.addMenuItem("Update", "sprintupdate");
-        manager.addMenuItem("Delete", "sprintdelete");
-        manager.addMenuItem("Start", "sprintstart");
-        manager.addMenuItem("Back", "back");
-
-        manager.init();
-    }
-
     private void replaceMessage(long chatId, long messageId, SendMessage message) {
         EditMessageText newMessage = new EditMessageText()
                 .setChatId(chatId)
@@ -138,6 +70,9 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onUpdateReceived(Update update) {
         userRegistrationService.register(update);
@@ -148,32 +83,16 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
             long chatId = update.getCallbackQuery().getMessage().getChatId();
             String callData = update.getCallbackQuery().getData();
             long messageId = update.getCallbackQuery().getMessage().getMessageId();
-            if (callData.equals("back")) {
-                SendMessage message = renderMenu(update, MenuType.MAIN_MENU);
-                replaceMessage(chatId, messageId, message);
-                return;
-            }
-            if (callData.equals("issue")) {
-                SendMessage message = renderMenu(update, MenuType.ISSUE);
-                replaceMessage(chatId, messageId, message);
-                return;
-            }
-            if (callData.equals("feature")) {
-                SendMessage message = renderMenu(update, MenuType.FEATURE);
-                replaceMessage(chatId, messageId, message);
-                return;
 
-            }
-            if (callData.equals("sprint")) {
-                SendMessage message = renderMenu(update, MenuType.SPRINT);
+            try {
+                MenuType menuType = MenuType.valueOf(callData.toUpperCase());
+                SendMessage message = renderMenu(update, menuType);
                 replaceMessage(chatId, messageId, message);
                 return;
+            } catch (IllegalArgumentException e) {
+                log.trace("Callback is not a menu item");
             }
-            if (callData.equals("comment")) {
-                SendMessage message = renderMenu(update, MenuType.COMMENT);
-                replaceMessage(chatId, messageId, message);
-                return;
-            }
+
             if (callData.equals("exit")) {
                 replaceMessageWithText(chatId, messageId, "Menu has been closed. If you want to continue, type /menu.");
                 return;
@@ -231,9 +150,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         } else if (update.hasMessage() && update.getMessage().hasText()) {
 
             if (update.getMessage().getText().equals("/menu") || update.getMessage().getText().equals("/start")) {
-                long chatId = update.getMessage().getChatId();
-                long messageId = update.getMessage().getMessageId();
-                SendMessage message = renderMenu(update, MenuType.MAIN_MENU);
+                SendMessage message = renderMenu(update, MenuType.BACK);
                 try {
                     execute(message);
                 } catch (TelegramApiException e) {
@@ -244,47 +161,18 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-
     private SendMessage renderMenu(Update update, MenuType type) {
         long chatId = 0;
-        if (update.hasMessage())
+        if (update.hasMessage()) {
             chatId = update.getMessage().getChatId();
-        if (update.hasCallbackQuery())
-            chatId = update.getCallbackQuery().getMessage().getChatId();
-
-        InlineKeyboardBuilder builder;
-
-        switch (type) {
-            case MAIN_MENU:
-                initMenu();
-                builder = manager.createMenuForPage(0);
-                builder.setChatId(chatId).setText("Which type of notification you want to configure:");
-                break;
-            case ISSUE:
-                initIssue();
-                builder = manager.createMenuForPage(0);
-                builder.setChatId(chatId).setText("Issue notifications configurations:");
-                break;
-            case SPRINT:
-                initSprint();
-                builder = manager.createMenuForPage(0);
-                builder.setChatId(chatId).setText("Sprint notifications configurations:");
-                break;
-            case COMMENT:
-                initComment();
-                builder = manager.createMenuForPage(0);
-                builder.setChatId(chatId).setText("Comment notifications configurations:");
-                break;
-            case FEATURE:
-                initFeature();
-                builder = manager.createMenuForPage(0);
-                builder.setChatId(chatId).setText("Feature notifications configurations:");
-                break;
-            default:
-                builder = manager.createMenuForPage(0);
         }
 
-        return builder.build();
+        if (update.hasCallbackQuery()) {
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+        }
+
+        manager = new TelegramBotView();
+        return type.renderMenu(manager, chatId);
     }
 
     @Override
