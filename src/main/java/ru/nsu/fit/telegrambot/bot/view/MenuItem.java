@@ -7,12 +7,12 @@ public class MenuItem {
     private String action;
 
 
-    public MenuItem(String name, String action) {
+    MenuItem(String name, String action) {
         this.name = name;
         this.action = action;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
@@ -20,7 +20,7 @@ public class MenuItem {
         this.name = name;
     }
 
-    public String getAction() {
+    String getAction() {
         return action;
     }
 

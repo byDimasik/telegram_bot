@@ -69,26 +69,15 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        System.out.println(update.hasCallbackQuery());
 
         if (update.hasCallbackQuery()) {
-            System.out.println("pokushay");
 
             long chatId = update.getCallbackQuery().getMessage().getChatId();
             String callData = update.getCallbackQuery().getData();
             long messageId = update.getCallbackQuery().getMessage().getMessageId();
             if (callData.equals("action 1")) {
 
-                EditMessageText newMessage = new EditMessageText()
-                        .setChatId(chatId)
-                        .setMessageId(Math.toIntExact(messageId))
-                        .setText("action1");
-                System.out.println("e boi");
-                try {
-                    execute(newMessage);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+                replaceMessageWithText(chatId, messageId, callData);
             }
             if (callData.equals(TelegramBotView.CANCEL_ACTION)) {
                 replaceMessageWithText(chatId, messageId, "Cancelled.");
@@ -102,25 +91,19 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
             replaceMessage(chatId, messageId, message);
         } else if (update.hasMessage() && update.getMessage().hasText()) {
-            System.out.println("pokushay1");
 
-
-            if (update.getMessage().getText().equals("/menu")) {
+            if (update.getMessage().getText().equals("/menu") || update.getMessage().getText().equals("/start")) {
 
                 long chatId = update.getMessage().getChatId();
-
                 InlineKeyboardBuilder builder = manager.createMenuForPage(0);
-
                 builder.setChatId(chatId).setText("Choose action:");
                 SendMessage message = builder.build();
-
 
                 try {
                     execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
@@ -131,7 +114,6 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
     public void onUpdatesReceived(List<Update> updates) {
         for (Update update: updates) {
             onUpdateReceived(update);
-
         }
     }
 

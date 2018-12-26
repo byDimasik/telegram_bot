@@ -33,11 +33,11 @@ public class InlineKeyboardBuilder {
             this.row = new ArrayList<>();
         }
 
-        public void button(String text, String callbackData) {
+        void button(String text, String callbackData) {
             row.add(new InlineKeyboardButton().setText(text).setCallbackData(callbackData));
         }
 
-        public void endRow() {
+        void endRow() {
             this.keyboard.add(this.row);
             this.row = null;
         }
@@ -50,7 +50,6 @@ public class InlineKeyboardBuilder {
             message.setText(text);
 
             InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-
             keyboardMarkup.setKeyboard(keyboard);
             message.setReplyMarkup(keyboardMarkup);
 
