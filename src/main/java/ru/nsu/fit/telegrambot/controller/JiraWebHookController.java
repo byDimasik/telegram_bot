@@ -47,5 +47,6 @@ public class JiraWebHookController {
     public void issueHook(@RequestBody JiraIssueEventDto event) {
         log.debug("/issue invoked");
 //        eventService.handleEvent(event);
+        eventService.handleIssueEvent(event);
     }
 }
