@@ -92,8 +92,8 @@ public enum MenuType {
 
     private String messageText;
 
-    private static final String TRUE_SYMBOL = " :heavy_multiplication_x:";
-    private static final String FALSE_SYMBOL = " :heavy_check_mark:";
+    private static final String FALSE_SYMBOL = " :heavy_multiplication_x:";
+    private static final String TRUE_SYMBOL = " :heavy_check_mark:";
 
     MenuType(String messageText) {
         this.messageText = messageText;
@@ -110,7 +110,7 @@ public enum MenuType {
         return builder.build();
     }
 
-    private static String getSymbol(boolean flag) {
+    private static String getSymbol(Boolean flag) {
         return EmojiParser.parseToUnicode(flag ? TRUE_SYMBOL : FALSE_SYMBOL);
     }
 }
