@@ -161,6 +161,49 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
                 return;
             }
 
+            if (callData.equals("issueupdate")) {
+            }
+
+            if (callData.equals("issuecrate")) {
+            }
+
+            if (callData.equals("issueworklog")) {
+            }
+
+            if (callData.equals("commentcreate")) {
+            }
+
+            if (callData.equals("commentupdate")) {
+            }
+
+            if (callData.equals("commentdelete")) {
+            }
+
+            if (callData.equals("featurewath")) {
+            }
+
+            if (callData.equals("featurewathissue")) {
+            }
+
+            if (callData.equals("featureattachment")) {
+            }
+
+            if (callData.equals("featuresubtask")) {
+            }
+
+            if (callData.equals("sprintcreate")) {
+            }
+
+            if (callData.equals("sprintupdate")) {
+            }
+
+            if (callData.equals("sprintstart")) {
+            }
+
+            if (callData.equals("sprintdelete")) {
+            }
+
+
             InlineKeyboardBuilder builder = manager.createMenuForPage(pageId);
 
             builder.setChatId(chatId).setText("Choose action:");
