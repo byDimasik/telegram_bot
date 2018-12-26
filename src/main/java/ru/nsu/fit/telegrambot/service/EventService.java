@@ -12,6 +12,10 @@ import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
 import ru.nsu.fit.telegrambot.repository.EventRepository;
 import ru.nsu.fit.telegrambot.viewModel.JiraEventFormatter;
+import ru.nsu.fit.telegrambot.viewModel.JiraEventTypeWithMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Event service
@@ -56,6 +60,19 @@ public class EventService {
         });
     }
 
+    private void handleTypedMessage(List<Long> chats, String eventText) {
+        chats.forEach(event -> {
+            SendMessage sendMessage = new SendMessage()
+                    .setChatId(event)
+                    .setText(eventText);
+            try {
+                bot.execute(sendMessage);
+            } catch (TelegramApiException e) {
+                log.error("Cant execute SendMessage", e);
+            }
+        });
+    }
+
     public void handleIssueEvent(JiraIssueEventDto event) {
         handleMessage(eventFormatter.parseIssueEvent(event));
     }
@@ -65,7 +82,25 @@ public class EventService {
     }
 
     public void handleCommentaryEvent(JiraCommentEventDto event) {
-        handleMessage(eventFormatter.parseCommentaryEvent(event));
+        JiraEventTypeWithMessage typedMessage = eventFormatter.parseCommentaryEvent(event);
+        List<Long> resultList = new ArrayList<>();
+        switch (typedMessage.getType()) {
+            case COMMENT_CREATE:
+                resultList = eventRepository.findAllChatIdByCommentCreateIs(true);
+                break;
+            case COMMENT_DELETE:
+                resultList = eventRepository.findAllChatIdByCommentDeleteIs(true);
+                break;
+            case COMMENT_UPDATE:
+                resultList = eventRepository.findAllChatIdByCommentUpdateIs(true);
+                break;
+            default:
+                break;
+        }
+        if (resultList.size() != 0) {
+            handleTypedMessage(resultList, typedMessage.getMessage());
+        }
+//        handleMessage(typedMessage.getMessage());
     }
 
     public void handleFeatureEvent(JiraFeatureEventDto event) {
