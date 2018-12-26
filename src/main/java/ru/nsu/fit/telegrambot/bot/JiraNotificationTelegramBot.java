@@ -12,7 +12,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nsu.fit.telegrambot.bot.view.InlineKeyboardBuilder;
 import ru.nsu.fit.telegrambot.bot.view.TelegramBotView;
 import ru.nsu.fit.telegrambot.config.TelegramBotConfig;
+import ru.nsu.fit.telegrambot.model.enums.CallBackEventType;
 import ru.nsu.fit.telegrambot.model.enums.MenuType;
+import ru.nsu.fit.telegrambot.service.CallBackService;
 import ru.nsu.fit.telegrambot.service.UserRegistrationService;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
     private static final String TG_PREFIX = "@";
     private final TelegramBotConfig telegramBotConfig;
     private final UserRegistrationService userRegistrationService;
+    private final CallBackService callBackService;
 
     private TelegramBotView manager;
 
@@ -35,12 +38,15 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
      *
      * @param telegramBotConfig       {@link TelegramBotConfig} bean
      * @param userRegistrationService {@link UserRegistrationService} bean
+     * @param callBackService         {@link CallBackService} bean
      */
     @Autowired
     public JiraNotificationTelegramBot(TelegramBotConfig telegramBotConfig,
-                                       UserRegistrationService userRegistrationService) {
+                                       UserRegistrationService userRegistrationService,
+                                       CallBackService callBackService) {
         this.telegramBotConfig = telegramBotConfig;
         this.userRegistrationService = userRegistrationService;
+        this.callBackService = callBackService;
         manager = new TelegramBotView();
     }
 
@@ -93,53 +99,18 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
                 log.trace("Callback is not a menu item");
             }
 
+            try {
+                CallBackEventType callBackEventType = CallBackEventType.valueOf(callData.toUpperCase());
+                callBackService.procesCallBackEvent(chatId, callBackEventType);
+                return;
+            } catch (IllegalArgumentException e) {
+                log.trace("Callback is not a event type");
+            }
+
             if (callData.equals("exit")) {
                 replaceMessageWithText(chatId, messageId, "Menu has been closed. If you want to continue, type /menu.");
                 return;
             }
-
-            if (callData.equals("issueupdate")) {
-            }
-
-            if (callData.equals("issuecrate")) {
-            }
-
-            if (callData.equals("issueworklog")) {
-            }
-
-            if (callData.equals("commentcreate")) {
-            }
-
-            if (callData.equals("commentupdate")) {
-            }
-
-            if (callData.equals("commentdelete")) {
-            }
-
-            if (callData.equals("featurewath")) {
-            }
-
-            if (callData.equals("featurewathissue")) {
-            }
-
-            if (callData.equals("featureattachment")) {
-            }
-
-            if (callData.equals("featuresubtask")) {
-            }
-
-            if (callData.equals("sprintcreate")) {
-            }
-
-            if (callData.equals("sprintupdate")) {
-            }
-
-            if (callData.equals("sprintstart")) {
-            }
-
-            if (callData.equals("sprintdelete")) {
-            }
-
 
             InlineKeyboardBuilder builder = manager.createMenuForPage(pageId);
 
