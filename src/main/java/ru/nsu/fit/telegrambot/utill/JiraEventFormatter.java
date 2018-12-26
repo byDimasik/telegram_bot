@@ -1,4 +1,4 @@
-package ru.nsu.fit.telegrambot.viewModel;
+package ru.nsu.fit.telegrambot.utill;
 
 import ru.nsu.fit.telegrambot.dto.*;
 import ru.nsu.fit.telegrambot.dto.addition.issueInformation.JiraIssueDto;
