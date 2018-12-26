@@ -7,4 +7,6 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JiraSprintDto {
     private String name;
+    private String state;
+    private String goal;
 }

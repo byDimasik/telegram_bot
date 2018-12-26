@@ -28,14 +28,12 @@ public class JiraWebHookController {
     public void springHook(@RequestBody String event) {
         log.debug("/sprint invoked");
 //        eventService.handleEvent(event);
-        System.out.println(event);
     }
 
     @PostMapping(path = "/commentary")
     public void commentaryHook(@RequestBody JiraCommentEventDto event) {
         log.debug("/commentary invoked");
 //        eventService.handleEvent(event);
-        System.out.println(event);
     }
 
     @PostMapping(path = "/feature")
