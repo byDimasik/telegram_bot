@@ -46,6 +46,7 @@ public class JiraWebHookController {
     @PostMapping(path = "/issue")
     public void issueHook(@RequestBody JiraIssueEventDto event) {
         log.debug("/issue invoked");
+        System.out.println("hooked issue");
         eventService.handleIssueEvent(event);
     }
 }
