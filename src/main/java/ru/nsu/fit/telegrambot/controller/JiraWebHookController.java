@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.fit.telegrambot.dto.JiraCommentEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraFeatureEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
-import ru.nsu.fit.telegrambot.dto.JiraSprintEventDto;
 import ru.nsu.fit.telegrambot.service.EventService;
 
 /**
@@ -26,28 +25,28 @@ public class JiraWebHookController {
     }
 
     @PostMapping(path = "/sprint")
-    public void springHook(@RequestBody JiraSprintEventDto event) {
+    public void springHook(@RequestBody String event) {
         log.debug("/sprint invoked");
-        eventService.handleEvent(event);
+//        eventService.handleEvent(event);
+        System.out.println(event);
     }
 
     @PostMapping(path = "/commentary")
     public void commentaryHook(@RequestBody JiraCommentEventDto event) {
         log.debug("/commentary invoked");
-        eventService.handleEvent(event);
+//        eventService.handleEvent(event);
+        System.out.println(event);
     }
 
     @PostMapping(path = "/feature")
     public void featureHook(@RequestBody JiraFeatureEventDto event) {
         log.debug("/feature invoked");
-        eventService.handleEvent(event);
+//        eventService.handleEvent(event);
     }
 
     @PostMapping(path = "/issue")
-//    public void issueHook(@RequestBody JiraIssueEventDto event) {
     public void issueHook(@RequestBody JiraIssueEventDto event) {
         log.debug("/issue invoked");
 //        eventService.handleEvent(event);
-        System.out.println(event);
     }
 }
