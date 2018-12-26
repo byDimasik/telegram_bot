@@ -45,7 +45,7 @@ public class UserRegistrationService {
                 log.debug("User has been successfully registered with chat id: [{}]", chatId);
             }
         } else {
-            log.error("Received bad update: [{}]", update);
+            log.trace("Received bad update: [{}]", update);
         }
     }
 }
