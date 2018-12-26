@@ -51,7 +51,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         manager.addMenuItem("Feature", "feature");
         manager.addMenuItem("Sprint", "sprint");
         manager.addMenuItem("Comment", "comment");
-        manager.addMenuItem("Cancel", "cancel");
+        manager.addMenuItem("Exit", "exit");
 
         manager.init();
     }
@@ -126,37 +126,42 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
 
         if (update.hasCallbackQuery()) {
 
+            int pageId = 0;
             long chatId = update.getCallbackQuery().getMessage().getChatId();
             String callData = update.getCallbackQuery().getData();
             long messageId = update.getCallbackQuery().getMessage().getMessageId();
-            if (callData.equals("back"))
-                renderMenu(update, MenuType.MAIN_MENU);
+            if (callData.equals("back")) {
+                SendMessage message = renderMenu(update, MenuType.MAIN_MENU);
+                replaceMessage(chatId,messageId, message);
+                return;
+            }
             if (callData.equals("issue")) {
-
-                initIssue();
-                InlineKeyboardBuilder builder = manager.createMenuForPage(0);
-                builder.setChatId(chatId).setText("Issue notifications configuration:");
-                SendMessage message = builder.build();
-                replaceMessage(chatId, messageId, message);
-
+                SendMessage message = renderMenu(update, MenuType.ISSUE);
+                replaceMessage(chatId,messageId, message);
                 return;
             }
             if (callData.equals("feature")) {
+                SendMessage message = renderMenu(update, MenuType.FEATURE);
+                replaceMessage(chatId,messageId, message);
+                return;
 
-                initIssue();
-                InlineKeyboardBuilder builder = manager.createMenuForPage(0);
-                builder.setChatId(chatId).setText("Feature notifications configuration:");
-                SendMessage message = builder.build();
+            }
+            if (callData.equals("sprint")) {
+                SendMessage message = renderMenu(update, MenuType.SPRINT);
                 replaceMessage(chatId, messageId, message);
-
                 return;
             }
-            if (callData.equals(TelegramBotView.CANCEL_ACTION)) {
-                replaceMessageWithText(chatId, messageId, "Cancelled.");
+            if (callData.equals("comment")) {
+                SendMessage message = renderMenu(update, MenuType.COMMENT);
+                replaceMessage(chatId, messageId, message);
                 return;
-
             }
-            int pageId = 0;
+            if (callData.equals("exit")) {
+                replaceMessageWithText(chatId, messageId, "Menu has been closed. If you want to continue, type /menu.");
+                return;
+            }
+
+
             InlineKeyboardBuilder builder = manager.createMenuForPage(pageId);
 
             builder.setChatId(chatId).setText("Choose action:");
@@ -166,14 +171,27 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         } else if (update.hasMessage() && update.getMessage().hasText()) {
 
             if (update.getMessage().getText().equals("/menu") || update.getMessage().getText().equals("/start")) {
-                renderMenu(update, MenuType.MAIN_MENU);
+                long chatId = update.getMessage().getChatId();
+                long messageId = update.getMessage().getMessageId();
+                SendMessage message = renderMenu(update, MenuType.MAIN_MENU);
+                try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }
 
 
-    private void renderMenu(Update update, MenuType type){
-        long chatId = update.getMessage().getChatId();
+    private SendMessage renderMenu(Update update, MenuType type){
+        long chatId = 0;
+        if (update.hasMessage())
+            chatId = update.getMessage().getChatId();
+        if (update.hasCallbackQuery())
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+
         InlineKeyboardBuilder builder = manager.createMenuForPage(0);
 
         switch (type){
@@ -198,13 +216,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
                 initFeature();
                 break;
         }
-        SendMessage message = builder.build();
-
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        return builder.build();
     }
     @Override
     public void onUpdatesReceived(List<Update> updates) {
