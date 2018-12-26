@@ -24,7 +24,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
     @Autowired
     public JiraNotificationTelegramBot(TelegramBotConfig telegramBotConfig) {
         this.telegramBotConfig = telegramBotConfig;
-        init();
+        initMenu();
     }
 
 
@@ -41,7 +41,8 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    public void init() {
+
+    private void initMenu() {
         manager = new TelegramBotView();
         manager.setColumnsCount(2);
 
@@ -52,7 +53,19 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
         manager.addMenuItem("cancel", "cancel");
 
         manager.init();
+    }
+    private void initIssue() {
 
+        manager = new TelegramBotView();
+        manager.setColumnsCount(2);
+
+        manager.addMenuItem("create", "issueaction 1");
+        manager.addMenuItem("update", "issueaction 2");
+        manager.addMenuItem("delete", "issueaction 3");
+        manager.addMenuItem("diman - valet", "issueaction 4");
+        manager.addMenuItem("cancel", "cancel");
+
+        manager.init();
     }
 
     private void replaceMessage(long chatId, long messageId, SendMessage message) {
@@ -78,7 +91,12 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
             long messageId = update.getCallbackQuery().getMessage().getMessageId();
             if (callData.equals("action 1")) {
 
-                replaceMessageWithText(chatId, messageId, callData);
+                initIssue();
+                InlineKeyboardBuilder builder = manager.createMenuForPage(0);
+                builder.setChatId(chatId).setText("Issue notifications configuration:");
+                SendMessage message = builder.build();
+                replaceMessage(chatId, messageId, message);
+
                 return;
             }
             if (callData.equals(TelegramBotView.CANCEL_ACTION)) {
@@ -98,7 +116,7 @@ public class JiraNotificationTelegramBot extends TelegramLongPollingBot {
             if (update.getMessage().getText().equals("/menu") || update.getMessage().getText().equals("/start")) {
 
                 long chatId = update.getMessage().getChatId();
-                init();
+                initMenu();
                 InlineKeyboardBuilder builder = manager.createMenuForPage(0);
                 builder.setChatId(chatId).setText("Choose action:");
                 SendMessage message = builder.build();
