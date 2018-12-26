@@ -18,7 +18,7 @@ public enum  CallBackEventType {
     BACK("Back");
 
     @Getter
-    String buttonText;
+    private String buttonText;
 
     CallBackEventType(String buttonText) {
         this.buttonText = buttonText;

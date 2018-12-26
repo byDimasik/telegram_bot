@@ -33,7 +33,7 @@ public enum MenuType {
             manager.addMenuItem(ISSUE_UPDATE.getButtonText(), ISSUE_UPDATE.name());
             manager.addMenuItem(ISSUE_DELETE.getButtonText(), ISSUE_DELETE.name());
             manager.addMenuItem(ISSUE_WORK_LOG.getButtonText(), ISSUE_WORK_LOG.name());
-            manager.addMenuItem(CallBackEventType.BACK.getButtonText(), CallBackEventType.BACK.name());
+            manager.addMenuItem(CallBackEventType.BACK.getButtonText(), ru.nsu.fit.telegrambot.model.enums.CallBackEventType.BACK.name());
 
             manager.init();
 
@@ -88,7 +88,7 @@ public enum MenuType {
         }
     };
 
-    String messageText;
+    private String messageText;
 
     MenuType(String messageText) {
         this.messageText = messageText;
