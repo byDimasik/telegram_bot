@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.nsu.fit.telegrambot.dto.JiraCommentEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraFeatureEventDto;
 import ru.nsu.fit.telegrambot.dto.JiraIssueEventDto;
 import ru.nsu.fit.telegrambot.service.EventService;
@@ -31,9 +30,10 @@ public class JiraWebHookController {
     }
 
     @PostMapping(path = "/commentary")
-    public void commentaryHook(@RequestBody JiraCommentEventDto event) {
+    public void commentaryHook(@RequestBody String event) {
         log.debug("/commentary invoked");
 //        eventService.handleEvent(event);
+        System.out.println(event);
     }
 
     @PostMapping(path = "/feature")
